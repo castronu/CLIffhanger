@@ -1,0 +1,29 @@
+<executable>
+    <path>/bin/ls</path>
+    <options>
+        <option>
+            <name>-l</name>
+            <required>false</required>
+            <description>Lorem ipsum...</description>
+        </option>
+        <option>
+            <name>-a</name>
+            <required>false</required>
+            <description>Lorem ipsum...</description>
+        </option>
+        <option>
+            <name>-t</name>
+            <required>false</required>
+            <description>Lorem ipsum...</description>
+        </option>
+        <option>
+            <name>-r</name>
+            <required>false</required>
+            <description>Lorem ipsum...</description>
+        </option>
+    </options>
+    <logs>
+        <log>/logs/output.log</log>
+        <log>/logs/outputDetails.log</log>
+    </logs>
+</executable>
