@@ -13,7 +13,6 @@ import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 
 /**
  * Created by castronu on 31/01/15.
@@ -25,68 +24,12 @@ public class App {
     public static void main(String[] args) throws JAXBException, IOException {
         JAXBContext jc = JAXBContext.newInstance("com.castronu.cliffangher.generated");
         Unmarshaller unmarshaller = jc.createUnmarshaller();
-        Source source = new StreamSource(Thread.currentThread().getContextClassLoader().getResourceAsStream("config.xml"));
+        Source source = new StreamSource(Thread.currentThread().getContextClassLoader().getResourceAsStream("src/test/resources/config.xml"));
 
         JAXBElement<ExecutableType> root = unmarshaller.unmarshal(
                 source, ExecutableType.class);
 
-        OptionsType options = root.getValue().getOptions();
-        List<String> logs = root.getValue().getLogs().getLog();
-
-        StringBuilder data=new StringBuilder();
-        //Header
-        data.append("<head>\n" +
-                "    <title>simple-todos</title>\n" +
-                "</head>\n" +
-                "\n" +
-                "<body>\n" +
-                "<h1>Welcome to Meteor!</h1>\n" +
-                "\n" +
-                "{{> hello}}\n" +
-                "\n" +
-                "\n" +
-                "{{> commands}}\n" +
-                "\n" +
-                "\n" +
-                "</body>\n" +
-                "\n" +
-                "<template name=\"commands\">");
-
-        for (String log : logs) {
-            data.append("<h1> Log path:"+log+"</h1>");
-            LOGGER.info(log);
-
-        }
-
-        LOGGER.info(root.getValue().getPath());
-
-        data.append("<h1>Executable path:"+root.getValue().getPath()+"</h1>");
-
-        List<OptionType> option = options.getOption();
-        data.append("<ul>");
-        for (OptionType optionType : option) {
-
-            data.append("<li>");
-            data.append(optionType.getDescription());
-            LOGGER.info(optionType.getDescription());
-            data.append("</li>");
-
-            data.append("<li>");data.append(optionType.getName());LOGGER.info(optionType.getName());     data.append("</li>");
-            data.append("<li>");data.append(optionType.getRequired());LOGGER.info(optionType.getRequired());
-            data.append("</li>");
-
-
-        }
-        data.append("</ul>");
-        //Footer
-        data.append("</template>\n" +
-                "\n" +
-                "\n" +
-                "<template name=\"hello\">\n" +
-                "    <button>click button</button>\n" +
-                "\n" +
-                "    <p>You've pressed the button {{counter}} times.</p>\n" +
-                "</template>");
+        StringBuilder data = new Formatter(root).invoke();
 
         FileUtils.writeStringToFile(new File("index.html"),data.toString());
 
@@ -103,5 +46,6 @@ public class App {
         errorGobbler.start();
 
     }
+
 }
 

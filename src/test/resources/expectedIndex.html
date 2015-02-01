@@ -1,0 +1,23 @@
+<head>
+    <title>simple-todos</title>
+</head>
+
+<body>
+<h1>Welcome to Meteor!</h1>
+
+{{> hello}}
+
+
+{{> commands}}
+
+
+</body>
+
+<template name="commands"><h1> Log path:/logs/output.log</h1><h1> Log path:/logs/outputDetails.log</h1><h1>Executable path:/bin/ls</h1><ul><li>Lorem ipsum...</li><li>-l</li><li>false</li><li>Lorem ipsum...</li><li>-a</li><li>false</li><li>Lorem ipsum...</li><li>-t</li><li>false</li><li>Lorem ipsum...</li><li>-r</li><li>false</li></ul></template>
+
+
+<template name="hello">
+    <button>click button</button>
+
+    <p>You've pressed the button {{counter}} times.</p>
+</template>
