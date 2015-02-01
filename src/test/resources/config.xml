@@ -1,27 +1,40 @@
 <executable>
-    <path>/bin/ls</path>
+    <path>grep</path>
     <options>
         <option>
-            <name>-l</name>
+            <name>-n</name>
             <required>false</required>
-            <description>Lorem ipsum...</description>
-        </option>
-        <option>
-            <name>-a</name>
-            <required>false</required>
-            <description>Lorem ipsum...</description>
-        </option>
-        <option>
-            <name>-t</name>
-            <required>false</required>
-            <description>Lorem ipsum...</description>
+            <description>Each output line is preceded by its relative line number in the
+                file, starting at line 1.  The line number counter is reset for
+                each file processed.  This option is ignored if -c, -L, -l, or -q
+                is specified.</description>
         </option>
         <option>
             <name>-r</name>
             <required>false</required>
-            <description>Lorem ipsum...</description>
+            <description>Recursively search subdirectories listed.</description>
+        </option>
+        <option>
+            <name>-h</name>
+            <required>false</required>
+            <description>Never print filename headers (i.e. filenames) with output lines.</description>
+        </option>
+        <option>
+            <name>-i</name>
+            <required>false</required>
+            <description>--ignore-case
+                Perform case insensitive matching.  By default, grep is case sen-
+                sitive.</description>
         </option>
     </options>
+    <arguments>
+        <argument>
+            <name>pattern</name>
+        </argument>
+        <argument>
+            <name>inputFile</name>
+        </argument>
+    </arguments>
     <logs>
         <log>/logs/output.log</log>
         <log>/logs/outputDetails.log</log>

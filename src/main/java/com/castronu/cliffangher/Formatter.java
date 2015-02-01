@@ -1,8 +1,6 @@
 package com.castronu.cliffangher;
 
-import com.castronu.cliffangher.generated.ExecutableType;
-import com.castronu.cliffangher.generated.OptionType;
-import com.castronu.cliffangher.generated.OptionsType;
+import com.castronu.cliffangher.generated.*;
 
 import javax.xml.bind.JAXBElement;
 import java.util.List;
@@ -24,58 +22,66 @@ class Formatter {
         StringBuilder data=new StringBuilder();
         //Header
         data.append("<head>\n" +
-                "    <title>simple-todos</title>\n" +
+                "    <title>Cliffhanger</title>\n" +
                 "</head>\n" +
                 "\n" +
                 "<body>\n" +
-                "<h1>Welcome to Meteor!</h1>\n" +
-                "\n" +
-                "{{> hello}}\n" +
-                "\n" +
+                "<h1>Welcome to Cliffhanger!</h1>\n" +
                 "\n" +
                 "{{> commands}}\n" +
                 "\n" +
+                "{{> logss}}\n" +
                 "\n" +
                 "</body>\n" +
                 "\n" +
-                "<template name=\"commands\">");
+                "\n" +
+                "<template name=\"commands\">\n" +
+                "     <!-- add a form below the h1 -->\n" +
+                "    <form class=\"new-task\" name=\"myform\" id=\"myform\">");
 
         for (String log : logs) {
-            data.append("<h1> Log path:"+log+"</h1>");
             App.LOGGER.info(log);
-
         }
 
         App.LOGGER.info(root.getValue().getPath());
 
-        data.append("<h1>Executable path:"+root.getValue().getPath()+"</h1>");
+        data.append(String.format("<input type=\"text\" name=\"%s\" value=\"%s\"/><br>",
+                root.getValue().getPath(),root.getValue().getPath()));
 
         List<OptionType> option = options.getOption();
-        data.append("<ul>");
+
         for (OptionType optionType : option) {
 
-            data.append("<li>");
-            data.append(optionType.getDescription());
+            String template = "<input type=\"checkbox\" name=\"%s\" value=\"%s\"/> %s  %s<br>";
+
+
+
+            data.append(String.format(template,optionType.getName(),optionType.getName(),optionType.getName(),
+                    optionType.getDescription()));
+
+            data.append("\n");
+
             App.LOGGER.info(optionType.getDescription());
-            data.append("</li>");
-
-            data.append("<li>");data.append(optionType.getName());
-            App.LOGGER.info(optionType.getName());     data.append("</li>");
-            data.append("<li>");data.append(optionType.getRequired());
+            App.LOGGER.info(optionType.getName());
             App.LOGGER.info(optionType.getRequired());
-            data.append("</li>");
-
-
         }
-        data.append("</ul>");
+
+        List<ArgumentType> argument = root.getValue().getArguments().getArgument();
+
+        for (ArgumentType argumentType : argument) {
+
+            String template = "<input type=\"text\" name=\"%s\" value=\"%s\" placehloder=\"%s\"/><br>";
+
+            data.append(String.format(template,argumentType.getName(),
+                    argumentType.getName(),argumentType.getName()));
+        }
+
         //Footer
-        data.append("</template>\n" +
-                "\n" +
-                "\n" +
-                "<template name=\"hello\">\n" +
-                "    <button>click button</button>\n" +
-                "\n" +
-                "    <p>You've pressed the button {{counter}} times.</p>\n" +
+        data.append("<input type=\"submit\" value=\"Submit\">" +
+                " </form>\n" +
+                "</template>" +
+                " <template name=\"logss\">\n" +
+                "    {{text}}\n" +
                 "</template>");
         return data;
     }

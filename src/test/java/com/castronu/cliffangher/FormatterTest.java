@@ -2,7 +2,6 @@ package com.castronu.cliffangher;
 
 import com.castronu.cliffangher.generated.ExecutableType;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -12,8 +11,6 @@ import javax.xml.bind.Unmarshaller;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 import java.io.File;
-import java.io.InputStream;
-import java.nio.file.Files;
 
 import static org.hamcrest.CoreMatchers.is;
 

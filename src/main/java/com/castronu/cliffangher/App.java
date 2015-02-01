@@ -24,7 +24,7 @@ public class App {
     public static void main(String[] args) throws JAXBException, IOException {
         JAXBContext jc = JAXBContext.newInstance("com.castronu.cliffangher.generated");
         Unmarshaller unmarshaller = jc.createUnmarshaller();
-        Source source = new StreamSource(Thread.currentThread().getContextClassLoader().getResourceAsStream("src/test/resources/config.xml"));
+        Source source = new StreamSource(Thread.currentThread().getContextClassLoader().getResourceAsStream("scripts/config.xml"));
 
         JAXBElement<ExecutableType> root = unmarshaller.unmarshal(
                 source, ExecutableType.class);

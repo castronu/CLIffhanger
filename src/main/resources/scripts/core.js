@@ -1,28 +1,51 @@
+
+
 // simple-todos.js
 if (Meteor.isClient) {
 
 
 
 
+// Inside the if (Meteor.isClient) block, right after Template.body.helpers:
 
-    Template.hello.events({
-        'click button': function () {
-            console.log("clicked");
-            // increment the counter when button is clicked
-            message = 122
-            Meteor.call("tail", message, function(err, response) {
+    Template.logss.helpers({
+        text: function () {
+            return Session.get("logss");
+        }
+
+    });
+
+
+
+    Template.commands.events({
+        "submit .new-task": function (event) {
+            // This function is called when the new task form is submitted
+            var command = "";
+
+            $.each($('#myform').serializeArray(), function() {
+                command += this.value + " ";
+            });
+
+            console.log(command);
+
+
+            Meteor.call("run", command, function(err, response) {
                 Session.set('code', response);
 
                 console.log(response);
                 console.log(err);
+                Session.set("logss", response);
             });
+
+
+
+            // Prevent default form submit
+            return false;
         }
     });
 
 
 }
-
-
 
 if (Meteor.isServer) {
     // load future from fibers
@@ -34,17 +57,15 @@ if (Meteor.isServer) {
 
 
     Meteor.methods({
-        tail: function(message) {
+        run: function(command) {
 
-            console.log(message);
+            console.log(command);
             // Set up a future
             var fut = new Future();
-
-
-            var command="pwd";
             exec(command,function(error,stdout,stderr){
                 if(error){
                     console.log(error);
+                    console.log(stderr.toString());
                     throw new Meteor.Error(500,command+" failed");
                 }
                 console.log(stdout.toString())
@@ -53,45 +74,12 @@ if (Meteor.isServer) {
 
             // Wait for async to finish before returning
             // the result
+            console.log("Finish!");
             return fut.wait();
         }
     });
 
 
-    Meteor.methods({
-        asyncJob: function(message) {
-
-
-
-            var Future = Npm.require('fibers/future');
-            var byline = Npm.require('byline');
-            var f = new Future;
-
-            var fs = Npm.require('fs');
-// create stream in whatever way you like
-            var instream = fs.createReadStream('/tmp/test.txt');
-            var stream = byline.createStream(instream);
-
-// run stream handling line-by-line events asynchronously
-            stream.on('data', Meteor.bindEnvironment(function (line) {
-                if (line) console.log(line)
-                else f.return();
-            }));
-
-            // await on the future yielding to the other fibers and the line-by-line handling
-            f.wait();
-
-
-        }
-    });
 
 
 }
-
-
-
-
-
-
-
-

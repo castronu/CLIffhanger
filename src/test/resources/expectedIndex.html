@@ -1,23 +1,29 @@
 <head>
-    <title>simple-todos</title>
+    <title>Cliffhanger</title>
 </head>
 
 <body>
-<h1>Welcome to Meteor!</h1>
-
-{{> hello}}
-
+<h1>Welcome to Cliffhanger!</h1>
 
 {{> commands}}
 
+{{> logss}}
 
 </body>
 
-<template name="commands"><h1> Log path:/logs/output.log</h1><h1> Log path:/logs/outputDetails.log</h1><h1>Executable path:/bin/ls</h1><ul><li>Lorem ipsum...</li><li>-l</li><li>false</li><li>Lorem ipsum...</li><li>-a</li><li>false</li><li>Lorem ipsum...</li><li>-t</li><li>false</li><li>Lorem ipsum...</li><li>-r</li><li>false</li></ul></template>
 
-
-<template name="hello">
-    <button>click button</button>
-
-    <p>You've pressed the button {{counter}} times.</p>
+<template name="commands">
+     <!-- add a form below the h1 -->
+    <form class="new-task" name="myform" id="myform"><input type="text" name="grep" value="grep"/><br><input type="checkbox" name="-n" value="-n"/> -n  Each output line is preceded by its relative line number in the
+                file, starting at line 1.  The line number counter is reset for
+                each file processed.  This option is ignored if -c, -L, -l, or -q
+                is specified.<br>
+<input type="checkbox" name="-r" value="-r"/> -r  Recursively search subdirectories listed.<br>
+<input type="checkbox" name="-h" value="-h"/> -h  Never print filename headers (i.e. filenames) with output lines.<br>
+<input type="checkbox" name="-i" value="-i"/> -i  --ignore-case
+                Perform case insensitive matching.  By default, grep is case sen-
+                sitive.<br>
+<input type="text" name="pattern" value="pattern" placehloder="pattern"/><br><input type="text" name="inputFile" value="inputFile" placehloder="inputFile"/><br><input type="submit" value="Submit"> </form>
+</template> <template name="logss">
+    {{text}}
 </template>
