@@ -24,7 +24,12 @@ public class App {
     public static void main(String[] args) throws JAXBException, IOException {
         JAXBContext jc = JAXBContext.newInstance("com.castronu.cliffangher.generated");
         Unmarshaller unmarshaller = jc.createUnmarshaller();
-        Source source = new StreamSource(Thread.currentThread().getContextClassLoader().getResourceAsStream("scripts/config.xml"));
+        if (args.length==0) {
+            LOGGER.error("Please provide the config file. Usage ./CLIffhanger.sh [config.xml]");
+            System.exit(1);
+        }
+        String config = args[0];
+        Source source = new StreamSource(new File(config));
 
         JAXBElement<ExecutableType> root = unmarshaller.unmarshal(
                 source, ExecutableType.class);
