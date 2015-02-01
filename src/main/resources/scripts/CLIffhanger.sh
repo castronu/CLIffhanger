@@ -1,0 +1,1 @@
+java -cp cliffhanger-1.0-SNAPSHOT.jar com.castronu.cliffangher.App

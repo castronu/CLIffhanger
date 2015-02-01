@@ -1,0 +1,35 @@
+{
+    "executable": {
+    "path": "/bin/ls",
+        "options": {
+        "option": [
+            {
+                "name": "-l",
+                "required": "false",
+                "description": "Lorem ipsum..."
+            },
+            {
+                "name": "-a",
+                "required": "false",
+                "description": "Lorem ipsum..."
+            },
+            {
+                "name": "-t",
+                "required": "false",
+                "description": "Lorem ipsum..."
+            },
+            {
+                "name": "-r",
+                "required": "false",
+                "description": "Lorem ipsum..."
+            }
+        ]
+    },
+    "logs": {
+        "log": [
+            "/logs/output.log",
+            "/logs/outputDetails.log"
+        ]
+    }
+}
+}

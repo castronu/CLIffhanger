@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="executable" type="executableType"/>
+  <xs:complexType name="logsType">
+    <xs:sequence>
+      <xs:element name="log" maxOccurs="unbounded" minOccurs="0">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="/logs/output.log"/>
+            <xs:enumeration value="/logs/outputDetails.log"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="optionsType">
+    <xs:sequence>
+      <xs:element type="optionType" name="option" maxOccurs="unbounded" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="executableType">
+    <xs:sequence>
+      <xs:element type="xs:string" name="path"/>
+      <xs:element type="optionsType" name="options"/>
+      <xs:element type="logsType" name="logs"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="optionType">
+    <xs:sequence>
+      <xs:element name="name">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="-l"/>
+            <xs:enumeration value="-a"/>
+            <xs:enumeration value="-t"/>
+            <xs:enumeration value="-r"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element type="xs:string" name="required"/>
+      <xs:element type="xs:string" name="description"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>
