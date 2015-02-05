@@ -54,8 +54,7 @@ class Formatter {
 
             String template = "<input type=\"checkbox\" name=\"%s\" value=\"%s\"/> %s  %s<br>";
 
-
-
+            
             data.append(String.format(template,optionType.getName(),optionType.getName(),optionType.getName(),
                     optionType.getDescription()));
 

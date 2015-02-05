@@ -8,14 +8,11 @@ if (Meteor.isClient) {
 
 // Inside the if (Meteor.isClient) block, right after Template.body.helpers:
 
-    Template.logss.helpers({
-        text: function () {
-            return Session.get("logss");
-        }
-
-    });
 
 
+
+// on the client
+    Meteor.subscribe('logss');
 
     Template.commands.events({
         "submit .new-task": function (event) {
@@ -48,20 +45,45 @@ if (Meteor.isClient) {
 }
 
 if (Meteor.isServer) {
+
+
+    LOGSS = new Mongo.Collection("logs");
+
+
     // load future from fibers
     var Future=Npm.require("fibers/future");
 // load exec
     var exec=Npm.require("child_process").exec;
 
 
-
-
     Meteor.methods({
         run: function(command) {
+
+            Tail = Npm.require('tail').Tail;
+
+            tail = new Tail("/tmp/mylog.log");
+
+            tail.on("line", function(data) {
+                console.log(data);
+
+            });
+
+            tail.on("error", function(error) {
+                console.log('ERROR: ', error);
+            });
 
             console.log(command);
             // Set up a future
             var fut = new Future();
+
+            // This should work for any async method
+            setTimeout(function() {
+
+                // Return the results
+                fut.return(" (delayed for 3 seconds)");
+
+            }, 3 * 1000);
+
             exec(command,function(error,stdout,stderr){
                 if(error){
                     console.log(error);
@@ -78,6 +100,7 @@ if (Meteor.isServer) {
             return fut.wait();
         }
     });
+
 
 
 

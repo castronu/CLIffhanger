@@ -1,0 +1,16 @@
+<executable>
+    <path>/Users/castronu/dummyScript.sh</path>
+    <options>
+    </options>
+    <arguments>
+        <argument>
+            <name>pattern</name>
+        </argument>
+        <argument>
+            <name>inputFile</name>
+        </argument>
+    </arguments>
+    <logs>
+        <log>/tmp/mylog.log</log>
+    </logs>
+</executable>
