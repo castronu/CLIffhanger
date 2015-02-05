@@ -25,5 +25,9 @@
                 sitive.<br>
 <input type="text" name="pattern" value="pattern" placehloder="pattern"/><br><input type="text" name="inputFile" value="inputFile" placehloder="inputFile"/><br><input type="submit" value="Submit"> </form>
 </template> <template name="logss">
-    {{text}}
+
+    {{#each logs}}
+    <li>{{content}}</li>
+    {{/each}}
+
 </template>
