@@ -22,7 +22,7 @@ public class FormatterTest {
 
         JAXBContext jc = JAXBContext.newInstance("com.castronu.cliffangher.generated");
         Unmarshaller unmarshaller = jc.createUnmarshaller();
-        Source source = new StreamSource(Thread.currentThread().getContextClassLoader().getResourceAsStream("config.xml"));
+        Source source = new StreamSource(Thread.currentThread().getContextClassLoader().getResourceAsStream("configGrep.xml"));
 
         JAXBElement<ExecutableType> root = unmarshaller.unmarshal(
                 source, ExecutableType.class);

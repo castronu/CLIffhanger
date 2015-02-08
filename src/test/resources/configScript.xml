@@ -1,15 +1,12 @@
 <executable>
     <path>/Users/castronu/dummyScript.sh</path>
-    <options>
-    </options>
-    <arguments>
-        <argument>
-            <name>pattern</name>
-        </argument>
-        <argument>
-            <name>inputFile</name>
-        </argument>
-    </arguments>
+    <description> This script only print every second the sys date on the log.
+        #!/bin/bash
+        while [ "true"  ]
+        do
+        sleep 2
+        echo `date`|tee /tmp/mylog.log
+        done</description>
     <logs>
         <log>/tmp/mylog.log</log>
     </logs>

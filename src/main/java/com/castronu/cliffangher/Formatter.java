@@ -1,8 +1,11 @@
 package com.castronu.cliffangher;
 
 import com.castronu.cliffangher.generated.*;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 
 import javax.xml.bind.JAXBElement;
+import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
@@ -16,10 +19,10 @@ import java.util.List;
 class Formatter {
 
     public static String produceHtmlPage(JAXBElement<ExecutableType> root) {
-        OptionsType options = root.getValue().getOptions();
+
         String executablePath = root.getValue().getPath();
         String description = root.getValue().getDescription();
-        List<String> logs = root.getValue().getLogs().getLog();
+
 
         try {
             String container = readFile("templates/container.h_tml");
@@ -34,23 +37,41 @@ class Formatter {
 
             String formOptionsHeader = readFile("templates/formoptionsheader.h_tml");
 
-            String form = String.format(formHeader,executablePath,description,
+            String form = String.format(formHeader, executablePath, description,
                     executablePath, executablePath);
 
-            List<ArgumentType> argument = root.getValue().getArguments().getArgument();
+            ArgumentsType arguments = root.getValue().getArguments();
 
-            for (ArgumentType argumentType : argument) {
-                String argumentName = argumentType.getName();
-                form += String.format(formArgument, argumentName, argumentName, argumentName);
+            LogsType logs = root.getValue().getLogs();
+
+            if (logs != null) {
+                String loghidden = readFile("templates/loghidden.h_tml");
+                String logpath = logs.getLog();
+
+                    form += String.format(loghidden,logpath);
+
             }
 
+            if (arguments != null) {
+
+                List<ArgumentType> argument = arguments.getArgument();
+
+                for (ArgumentType argumentType : argument) {
+                    String argumentName = argumentType.getName();
+                    form += String.format(formArgument, argumentName, argumentName, argumentName);
+                }
+            }
             form += formOptionsHeader;
 
-            List<OptionType> option = options.getOption();
 
-            for (OptionType optionType : option) {
-                form += String.format(formOption, optionType.getName(), optionType.getName(), optionType.getName(),
-                        optionType.getDescription());
+            OptionsType options = root.getValue().getOptions();
+            if (options != null) {
+                List<OptionType> option = options.getOption();
+
+                for (OptionType optionType : option) {
+                    form += String.format(formOption, optionType.getName(), optionType.getName(), optionType.getName(),
+                            optionType.getDescription());
+                }
             }
 
             form += formFooter;
@@ -59,14 +80,13 @@ class Formatter {
 
             return finalResult;
         } catch (IOException | URISyntaxException e) {
-            throw new IllegalStateException("Cannot create html page for meteor.");
+            throw new IllegalStateException("Cannot create html page for meteor.", e);
         }
     }
 
     private static String readFile(String path)
             throws IOException, URISyntaxException {
-        byte[] encoded = Files.readAllBytes(Paths.get(
-                Thread.currentThread().getContextClassLoader().getResource(path).toURI()));
-        return new String(encoded, Charset.defaultCharset());
+        String fileContent = IOUtils.toString(Thread.currentThread().getContextClassLoader().getResourceAsStream(path));
+        return fileContent;
     }
 }

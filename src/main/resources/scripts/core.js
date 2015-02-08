@@ -1,46 +1,37 @@
-// simple-todos.js
+
 if (Meteor.isClient) {
-
-
+    //Configure the template logss to bu updated when the server add an entry on the collection LOGSS.
+    LOGSS = new Mongo.Collection("logs");
+    Meteor.subscribe('logss');
     Template.logss.logs = function () {
         return LOGSS.find();
     }
-
-// Inside the if (Meteor.isClient) block, right after Template.body.helpers:
-
-
-// on the client
-    Meteor.subscribe('logss');
-
-
-    LOGSS = new Mongo.Collection("logs");
-
+    //Bootstrap JS for Semantic UI: https://github.com/nooitaf/meteor-semantic-ui
     Template.commands.rendered = function () {
         this.$('.ui.slider.checkbox').checkbox();
     }
 
-
+    //Listener for the submit of the form
     Template.commands.events({
         "submit .new-task": function (event) {
             // This function is called when the new task form is submitted
             var command = "";
-
             $.each($('#myform').serializeArray(), function () {
-                command += this.value + " ";
+
+                //If the conifugration contains a log tag, the html page is created with an hidden log path.
+                //The server start to tail on the log.
+                if (this.name == "hidden_log") {
+                    Meteor.call("startTailOnLog", this.value);
+                } else {command += this.value + " ";}
             });
 
-            console.log(command);
+            console.log("Command from the form: "+command);
 
-
-            Meteor.call("run", command, function (err, response) {
-                Session.set('code', response);
-
+            //The server method executeCommand is called
+            Meteor.call("executeCommand", command, function (err, response) {
                 console.log(response);
                 console.log(err);
-                Session.set("logss", response);
             });
-
-
             // Prevent default form submit
             return false;
         }
@@ -51,119 +42,93 @@ if (Meteor.isClient) {
 
 if (Meteor.isServer) {
 
-    var count = 0;
+    var logEntryCounter = 0;
+    var Future = Npm.require("fibers/future");
+    //Child_process is used to run the target command
+    var exec = Npm.require("child_process").exec;
+    //Fiber is used to wrap collection insertions
+    var Fiber = Npm.require('fibers');
 
     LOGSS = new Mongo.Collection("logs");
 
+    //Clean up old logs...
     Meteor.startup(function () {
-
         LOGSS.remove({});
-
     });
 
-
+    //Synchronize with the client...
     Meteor.publish("logss", function () {
         return LOGSS.find();
     });
 
-
-    Fiber = Npm.require('fibers');
-
-    Tail = Npm.require('tail').Tail;
-
-    tail = new Tail("/tmp/mylog.log");
-
-    tail.on("line", function (data) {
-        console.log(data);
-        var document = {
-            id: count,
-            content: data,
-            details: "dddddd"
-        };
-        console.log(count);
-
-        Fiber(function () {
-            LOGSS.insert(document);
-        }).run();
-        count++;
-    });
-
-    tail.on("error", function (error) {
-        console.log('ERROR: ', error);
-    });
-
-
-    // load future from fibers
-    var Future = Npm.require("fibers/future");
-// load exec
-    var exec = Npm.require("child_process").exec;
-
-
+    //Tail on a given log file, when a new line is added insert in the LOGSS collection. The framework will
+    // automatically update the logss template on the client due to publish/subscrive
     Meteor.methods({
-        run: function (command) {
+        startTailOnLog: function (logPath) {
 
+            console.log("Log path:  "+logPath);
             Tail = Npm.require('tail').Tail;
-
-            tail = new Tail("/tmp/mylog.log");
-
+            tail = new Tail(logPath);
             tail.on("line", function (data) {
                 console.log(data);
-
+                var document = {
+                    id: logEntryCounter,
+                    content: data,
+                    details: "details..."
+                };
+                console.log(logEntryCounter);
+                Fiber(function () {
+                    LOGSS.insert(document);
+                }).run();
+                logEntryCounter++;
             });
-
             tail.on("error", function (error) {
                 console.log('ERROR: ', error);
             });
+            //TODO refactor this..
+            return "ok";
+        }
+    });
 
-            console.log(command);
+    Meteor.methods({
+        executeCommand: function (command) {
+
+            console.log("The client say: EXEC --> "+command);
             // Set up a future
             var fut = new Future();
 
             // This should work for any async method
             setTimeout(function () {
-
                 // Return the results
-                fut.return(" (delayed for 3 seconds)");
-
-            }, 3 * 1000);
+                fut.return(" (delayed for 2 seconds)");
+            }, 2 * 1000);
 
             exec(command, function (error, stdout, stderr) {
                 if (error) {
-                    console.log(error);
+                    //In case of error, add the error on LOGSS collection
                     console.log(stderr.toString());
-                    //throw new Meteor.Error(500, command + " failed");
-
                     Fiber(function () {
                         var logEntry = {
-                            id: count,
+                            id: logEntryCounter,
                             content: command + "output : ERROR " + stderr.toString(),
                             details: "details..."
                         };
-
                         LOGSS.insert(logEntry);
-                        count++;
-
+                        logEntryCounter++;
                     }).run();
-
                 } else {
-
-
+                    //The process has finish... insering log in the LOGSS collection
                     Fiber(function () {
                         var logEntry = {
-                            id: count,
+                            id: logEntryCounter,
                             content: command + "output :" + stdout.toString(),
                             details: "details..."
                         };
-
                         LOGSS.insert(logEntry);
-                        count++;
-
+                        logEntryCounter++;
                     }).run();
                 }
-
-                // fut.return(stdout.toString());
             });
-
             // Wait for async to finish before returning
             // the result
             console.log("Finish!");

@@ -3,7 +3,7 @@
   <xs:element name="executable" type="executableType"/>
   <xs:complexType name="logsType">
     <xs:sequence>
-      <xs:element type="xs:string" name="log" maxOccurs="unbounded" minOccurs="0"/>
+      <xs:element type="xs:string" name="log" maxOccurs="1" minOccurs="0"/>
     </xs:sequence>
   </xs:complexType>
   <xs:complexType name="argumentsType">
@@ -23,12 +23,12 @@
   </xs:complexType>
   <xs:complexType name="executableType">
     <xs:sequence>
-      <xs:element type="xs:string" name="path"/>
-        <xs:element type="xs:string" name="description"/>
+      <xs:element type="xs:string" name="path" minOccurs="1" maxOccurs="1"/>
+        <xs:element type="xs:string" name="description" minOccurs="0" maxOccurs="1"/>
 
-      <xs:element type="optionsType" name="options"/>
-      <xs:element type="argumentsType" name="arguments"/>
-      <xs:element type="logsType" name="logs"/>
+      <xs:element type="optionsType" name="options" minOccurs="0" maxOccurs="1" />
+      <xs:element type="argumentsType" name="arguments" minOccurs="0" maxOccurs="1"/>
+      <xs:element type="logsType" name="logs" minOccurs="0" maxOccurs="1"/>
     </xs:sequence>
   </xs:complexType>
   <xs:complexType name="optionType">

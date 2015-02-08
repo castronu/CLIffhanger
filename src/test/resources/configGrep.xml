@@ -37,7 +37,6 @@
         </argument>
     </arguments>
     <logs>
-        <log>/logs/output.log</log>
-        <log>/logs/outputDetails.log</log>
+        <log>/tmp/output.log</log>
     </logs>
 </executable>
