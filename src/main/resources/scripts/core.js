@@ -2,11 +2,9 @@
 if (Meteor.isClient) {
 
 
-
-
-        Template.logss.logs = function(){
-            return LOGSS.find();
-        }
+    Template.logss.logs = function () {
+        return LOGSS.find();
+    }
 
 // Inside the if (Meteor.isClient) block, right after Template.body.helpers:
 
@@ -17,7 +15,7 @@ if (Meteor.isClient) {
 
     LOGSS = new Mongo.Collection("logs");
 
-    Template.commands.rendered = function(){
+    Template.commands.rendered = function () {
         this.$('.ui.slider.checkbox').checkbox();
     }
 
@@ -53,10 +51,11 @@ if (Meteor.isClient) {
 
 if (Meteor.isServer) {
 
+    var count = 0;
 
     LOGSS = new Mongo.Collection("logs");
 
-    Meteor.startup(function() {
+    Meteor.startup(function () {
 
         LOGSS.remove({});
 
@@ -73,7 +72,7 @@ if (Meteor.isServer) {
     Tail = Npm.require('tail').Tail;
 
     tail = new Tail("/tmp/mylog.log");
-    var count=0;
+
     tail.on("line", function (data) {
         console.log(data);
         var document = {
@@ -132,17 +131,37 @@ if (Meteor.isServer) {
                 if (error) {
                     console.log(error);
                     console.log(stderr.toString());
-                    throw new Meteor.Error(500, command + " failed");
+                    //throw new Meteor.Error(500, command + " failed");
+
+                    Fiber(function () {
+                        var logEntry = {
+                            id: count,
+                            content: command + "output : ERROR " + stderr.toString(),
+                            details: "details..."
+                        };
+
+                        LOGSS.insert(logEntry);
+                        count++;
+
+                    }).run();
+
+                } else {
+
+
+                    Fiber(function () {
+                        var logEntry = {
+                            id: count,
+                            content: command + "output :" + stdout.toString(),
+                            details: "details..."
+                        };
+
+                        LOGSS.insert(logEntry);
+                        count++;
+
+                    }).run();
                 }
-                console.log(stdout.toString())
-                Fiber(function () {
-                    LOGSS.insert(stdout.toString());
-                    LOGSS.insert("finish");
 
-                }).run();
-
-
-               // fut.return(stdout.toString());
+                // fut.return(stdout.toString());
             });
 
             // Wait for async to finish before returning
