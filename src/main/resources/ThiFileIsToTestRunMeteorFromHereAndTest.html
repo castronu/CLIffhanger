@@ -1,0 +1,148 @@
+<head>
+    <title>Cliffhanger</title>
+</head>
+
+<body>
+
+{{> commands}}
+
+{{> commandEvents}}
+
+{{> logss}}
+
+</body>
+
+<template name="commands">
+    <!-- add a form below the h1 -->
+
+    <div class="ui two column centered grid">
+
+        <div class="four column centered row">
+            <div class="column"></div>
+            <div class="column"></div>
+        </div>
+
+        <div class="column">
+            <div class="ui central aligned segment">
+
+                <h1>Welcome to Cliffhanger!</h1>
+
+
+
+                <div class="ui message">
+                    <div class="header">
+                        grep
+                    </div>
+                    <p>This program search a given pattern in a given input file.</p>
+                </div>
+                <form class="ui form new-task" name="myform" id="myform">
+                    <input type="hidden" name="grep" value="grep">
+                    <input type="hidden" name="hidden_log" value="/tmp/output.log"><div class="field">
+                    <label>pattern</label>
+                    <input type="text" name="pattern" placeholder="pattern">
+                </div>
+
+                    <div class="field">
+                        <label>inputFile</label>
+                        <input type="text" name="inputFile" placeholder="inputFile">
+                    </div>
+
+                    <h5 class="ui header">Options</h5><div class="field">
+                    <div class="ui slider checkbox">
+                        <input type="checkbox" name="-n" value="-n">
+                        <label>
+                            <strong>-n</strong>, Each output line is preceded by its relative line number in the
+                            file, starting at line 1.  The line number counter is reset for
+                            each file processed.  This option is ignored if -c, -L, -l, or -q
+                            is specified.
+                        </label>
+                    </div>
+                </div>
+
+
+
+
+
+                    <div class="field">
+                        <div class="ui slider checkbox">
+                            <input type="checkbox" name="-r" value="-r">
+                            <label>
+                                <strong>-r</strong>, Recursively search subdirectories listed.
+                            </label>
+                        </div>
+                    </div>
+
+
+
+
+
+                    <div class="field">
+                        <div class="ui slider checkbox">
+                            <input type="checkbox" name="-h" value="-h">
+                            <label>
+                                <strong>-h</strong>, Never print filename headers (i.e. filenames) with output lines.
+                            </label>
+                        </div>
+                    </div>
+
+
+
+
+
+                    <div class="field">
+                        <div class="ui slider checkbox">
+                            <input type="checkbox" name="-i" value="-i">
+                            <label>
+                                <strong>-i</strong>, --ignore-case
+                                Perform case insensitive matching.  By default, grep is case sen-
+                                sitive.
+                            </label>
+                        </div>
+                    </div>
+
+
+
+
+
+                    <input class="ui submit button" type="submit" name="submit">
+                </form>
+
+
+            </div>
+        </div>
+    </div>
+</template>
+
+<template name="commandEvents">
+    <div class="ui two column centered grid">
+        <div class="four column centered row">
+            <div class="column"></div>
+            <div class="column"></div>
+        </div>
+        <div class="column">
+            <div class="ui central aligned segment">
+                <h2>Events</h2>
+                {{#each commandEvents}}
+                <li class="my-pid">{{pid}} {{content}} </li>
+                {{/each}}
+            </div>
+        </div>
+    </div>
+</template>
+
+<template name="logss">
+    <div class="ui two column centered grid">
+        <div class="four column centered row">
+            <div class="column"></div>
+            <div class="column"></div>
+        </div>
+        <div class="column">
+            <div class="ui central aligned segment">
+                <h2>Logs</h2>
+                {{#each logs}}
+                <li>{{id}} --> {{content}}</li>
+                {{/each}}
+            </div>
+        </div>
+    </div>
+</template>

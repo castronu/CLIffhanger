@@ -2,6 +2,16 @@
 if (Meteor.isClient) {
     //Configure the template logss to bu updated when the server add an entry on the collection LOGSS.
     LOGSS = new Mongo.Collection("logs");
+    EVENTS = new Mongo.Collection("commandEvents");
+
+
+
+
+    Meteor.subscribe('commandEvents');
+    Template.commandEvents.commandEvents = function () {
+        return EVENTS.find();
+    }
+
     Meteor.subscribe('logss');
     Template.logss.logs = function () {
         return LOGSS.find();
@@ -38,6 +48,15 @@ if (Meteor.isClient) {
     });
 
 
+    Template.commandEvents.events({
+
+        "click .my-pid": function (event, template) {
+           //TODO GET VALUE OF THE PID! alert($(event.target).value());
+        }
+
+
+    });
+
 }
 
 if (Meteor.isServer) {
@@ -46,14 +65,25 @@ if (Meteor.isServer) {
     var Future = Npm.require("fibers/future");
     //Child_process is used to run the target command
     var exec = Npm.require("child_process").exec;
+    var spawn = Npm.require("child_process").spawn;
+
+
     //Fiber is used to wrap collection insertions
     var Fiber = Npm.require('fibers');
 
     LOGSS = new Mongo.Collection("logs");
+    EVENTS = new Mongo.Collection("commandEvents");
+
 
     //Clean up old logs...
     Meteor.startup(function () {
         LOGSS.remove({});
+        EVENTS.remove({});
+    });
+
+    //Synchronize with the client...
+    Meteor.publish("commandEvents", function () {
+        return EVENTS.find();
     });
 
     //Synchronize with the client...
@@ -90,6 +120,8 @@ if (Meteor.isServer) {
         }
     });
 
+    var processCounter=0;
+
     Meteor.methods({
         executeCommand: function (command) {
 
@@ -103,38 +135,69 @@ if (Meteor.isServer) {
                 fut.return(" (delayed for 2 seconds)");
             }, 2 * 1000);
 
-            exec(command, function (error, stdout, stderr) {
-                if (error) {
-                    //In case of error, add the error on LOGSS collection
-                    console.log(stderr.toString());
-                    Fiber(function () {
-                        var logEntry = {
-                            id: logEntryCounter,
-                            content: command + "output : ERROR " + stderr.toString(),
-                            details: "details..."
-                        };
-                        LOGSS.insert(logEntry);
-                        logEntryCounter++;
-                    }).run();
-                } else {
-                    //The process has finish... insering log in the LOGSS collection
-                    Fiber(function () {
-                        var logEntry = {
-                            id: logEntryCounter,
-                            content: command + "output :" + stdout.toString(),
-                            details: "details..."
-                        };
-                        LOGSS.insert(logEntry);
-                        logEntryCounter++;
-                    }).run();
+
+
+            var child = exec(command);
+
+            var isFirst=true;
+
+            child.stdout.on('data', function(data) {
+                if (isFirst == true) {
+                    logEvent("Process Started", child.pid);
+                    isFirst=false;
                 }
+
+
+                console.log(child.pid);
+                Fiber(function () {
+                    var logEntry = {
+                        id: logEntryCounter,
+                        content: command + "output :" + data.toString(),
+                        details: "details..."
+                    };
+                    LOGSS.insert(logEntry);
+                    logEntryCounter++;
+                }).run();
             });
-            // Wait for async to finish before returning
-            // the result
-            console.log("Finish!");
+            child.stderr.on('data', function(data) {
+                console.log('stderr: ' + data);
+                //In case of error, add the error on LOGSS collection
+                Fiber(function () {
+                    var logEntry = {
+                        id: logEntryCounter,
+                        content: command + "output : ERROR " + data.toString(),
+                        details: "details..."
+                    };
+                    LOGSS.insert(logEntry);
+                    logEntryCounter++;
+                }).run();
+            });
+            child.on('close', function(code) {
+                //The process has finish... insering log in the LOGSS collection
+
+                if(code!=0) {
+                    logEvent("Process finished with errors :(!");
+                } else {
+                logEvent("Process finished!", child.pid);}
+
+
+                console.log('closing code: ' + code);
+            });
             return fut.wait();
         }
     });
 
+    function logEvent(message,pid) {
+        var date = new Date();
+        var document = {
+            id: processCounter,
+            content: date+" "+message,
+            pid : pid
+        };
+        Fiber(function () {
+            EVENTS.insert(document);
+        }).run();
+        processCounter++;
+    }
 
 }
