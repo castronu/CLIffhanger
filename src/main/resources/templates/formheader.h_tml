@@ -1,0 +1,8 @@
+<div class="ui message">
+  <div class="header">
+    %s
+  </div>
+  <p>%s</p>
+</div>
+<form class="ui form new-task" name="myform" id="myform">
+<input type="hidden" name="%s" value="%s">

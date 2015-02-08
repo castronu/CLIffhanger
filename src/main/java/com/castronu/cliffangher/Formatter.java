@@ -3,85 +3,70 @@ package com.castronu.cliffangher;
 import com.castronu.cliffangher.generated.*;
 
 import javax.xml.bind.JAXBElement;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 
 /**
-* Created by castronu on 01/02/15.
-*/
+ * Created by castronu on 01/02/15.
+ */
 class Formatter {
-    private JAXBElement<ExecutableType> root;
 
-    public Formatter(JAXBElement<ExecutableType> root) {
-        this.root = root;
-    }
-
-    public StringBuilder invoke() {
+    public static String produceHtmlPage(JAXBElement<ExecutableType> root) {
         OptionsType options = root.getValue().getOptions();
+        String executablePath = root.getValue().getPath();
+        String description = root.getValue().getDescription();
         List<String> logs = root.getValue().getLogs().getLog();
 
-        StringBuilder data=new StringBuilder();
-        //Header
-        data.append("<head>\n" +
-                "    <title>Cliffhanger</title>\n" +
-                "</head>\n" +
-                "\n" +
-                "<body>\n" +
-                "<h1>Welcome to Cliffhanger!</h1>\n" +
-                "\n" +
-                "{{> commands}}\n" +
-                "\n" +
-                "{{> logss}}\n" +
-                "\n" +
-                "</body>\n" +
-                "\n" +
-                "\n" +
-                "<template name=\"commands\">\n" +
-                "     <!-- add a form below the h1 -->\n" +
-                "    <form class=\"new-task\" name=\"myform\" id=\"myform\">");
+        try {
+            String container = readFile("templates/container.h_tml");
 
-        for (String log : logs) {
-            App.LOGGER.info(log);
+            String formHeader = readFile("templates/formheader.h_tml");
+
+            String formFooter = readFile("templates/formfooter.h_tml");
+
+            String formArgument = readFile("templates/formargument.h_tml");
+
+            String formOption = readFile("templates/formoption.h_tml");
+
+            String formOptionsHeader = readFile("templates/formoptionsheader.h_tml");
+
+            String form = String.format(formHeader,executablePath,description,
+                    executablePath, executablePath);
+
+            List<ArgumentType> argument = root.getValue().getArguments().getArgument();
+
+            for (ArgumentType argumentType : argument) {
+                String argumentName = argumentType.getName();
+                form += String.format(formArgument, argumentName, argumentName, argumentName);
+            }
+
+            form += formOptionsHeader;
+
+            List<OptionType> option = options.getOption();
+
+            for (OptionType optionType : option) {
+                form += String.format(formOption, optionType.getName(), optionType.getName(), optionType.getName(),
+                        optionType.getDescription());
+            }
+
+            form += formFooter;
+
+            String finalResult = container.replace("<!--[FORM_CONTENT]-->", form);
+
+            return finalResult;
+        } catch (IOException | URISyntaxException e) {
+            throw new IllegalStateException("Cannot create html page for meteor.");
         }
+    }
 
-        App.LOGGER.info(root.getValue().getPath());
-
-        data.append(String.format("<input type=\"text\" name=\"%s\" value=\"%s\"/><br>",
-                root.getValue().getPath(),root.getValue().getPath()));
-
-        List<OptionType> option = options.getOption();
-
-        for (OptionType optionType : option) {
-
-            String template = "<input type=\"checkbox\" name=\"%s\" value=\"%s\"/> %s  %s<br>";
-
-            
-            data.append(String.format(template,optionType.getName(),optionType.getName(),optionType.getName(),
-                    optionType.getDescription()));
-
-            data.append("\n");
-
-            App.LOGGER.info(optionType.getDescription());
-            App.LOGGER.info(optionType.getName());
-            App.LOGGER.info(optionType.getRequired());
-        }
-
-        List<ArgumentType> argument = root.getValue().getArguments().getArgument();
-
-        for (ArgumentType argumentType : argument) {
-
-            String template = "<input type=\"text\" name=\"%s\" value=\"%s\" placehloder=\"%s\"/><br>";
-
-            data.append(String.format(template,argumentType.getName(),
-                    argumentType.getName(),argumentType.getName()));
-        }
-
-        //Footer
-        data.append("<input type=\"submit\" value=\"Submit\">" +
-                " </form>\n" +
-                "</template>" +
-                " <template name=\"logss\">\n" +
-                "    {{text}}\n" +
-                "</template>");
-        return data;
+    private static String readFile(String path)
+            throws IOException, URISyntaxException {
+        byte[] encoded = Files.readAllBytes(Paths.get(
+                Thread.currentThread().getContextClassLoader().getResource(path).toURI()));
+        return new String(encoded, Charset.defaultCharset());
     }
 }

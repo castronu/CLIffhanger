@@ -2,7 +2,6 @@ package com.castronu.cliffangher;
 
 import com.castronu.cliffangher.generated.ExecutableType;
 import org.apache.commons.io.FileUtils;
-import org.junit.Assert;
 import org.junit.Test;
 
 import javax.xml.bind.JAXBContext;
@@ -13,12 +12,13 @@ import javax.xml.transform.stream.StreamSource;
 import java.io.File;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 
 public class FormatterTest {
 
     @Test
-    public void testInvoke() throws Exception {
+    public void testHtml() throws Exception {
 
         JAXBContext jc = JAXBContext.newInstance("com.castronu.cliffangher.generated");
         Unmarshaller unmarshaller = jc.createUnmarshaller();
@@ -27,10 +27,10 @@ public class FormatterTest {
         JAXBElement<ExecutableType> root = unmarshaller.unmarshal(
                 source, ExecutableType.class);
 
-        StringBuilder data = new Formatter(root).invoke();
+        String data = Formatter.produceHtmlPage(root);
 
         String expected = FileUtils.readFileToString(new File(Thread.currentThread().getContextClassLoader().getResource("expectedIndex.html").getFile()));
 
-        Assert.assertThat(data.toString(),is(expected));
+        assertThat(expected.replaceAll("\\s+",""),is(data.replaceAll("\\s+","")));
     }
 }

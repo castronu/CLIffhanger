@@ -1,5 +1,6 @@
 <executable>
     <path>grep</path>
+    <description>This program search a given pattern in a given input file.</description>
     <options>
         <option>
             <name>-n</name>

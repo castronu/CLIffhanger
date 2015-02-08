@@ -24,6 +24,8 @@
   <xs:complexType name="executableType">
     <xs:sequence>
       <xs:element type="xs:string" name="path"/>
+        <xs:element type="xs:string" name="description"/>
+
       <xs:element type="optionsType" name="options"/>
       <xs:element type="argumentsType" name="arguments"/>
       <xs:element type="logsType" name="logs"/>

@@ -1,0 +1,52 @@
+<head>
+    <title>Cliffhanger</title>
+</head>
+
+<body>
+
+{{> commands}}
+
+{{> logss}}
+
+</body>
+
+<template name="commands">
+    <!-- add a form below the h1 -->
+
+    <div class="ui two column centered grid">
+
+        <div class="four column centered row">
+            <div class="column"></div>
+            <div class="column"></div>
+        </div>
+
+        <div class="column">
+            <div class="ui central aligned segment">
+
+                <h1>Welcome to Cliffhanger!</h1>
+
+
+
+                    <!--[FORM_CONTENT]-->
+
+
+            </div>
+        </div>
+    </div>
+</template>
+<template name="logss">
+    <div class="ui two column centered grid">
+        <div class="four column centered row">
+            <div class="column"></div>
+            <div class="column"></div>
+        </div>
+        <div class="column">
+            <div class="ui central aligned segment">
+                <h2>Logs</h2>
+                {{#each logs}}
+                <li>{{content}}</li>
+                {{/each}}
+            </div>
+        </div>
+    </div>
+</template>

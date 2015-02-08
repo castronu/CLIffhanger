@@ -25,7 +25,6 @@ if (Meteor.isClient) {
     Template.commands.events({
         "submit .new-task": function (event) {
             // This function is called when the new task form is submitted
-            alert('clciked');
             var command = "";
 
             $.each($('#myform').serializeArray(), function () {
@@ -136,7 +135,14 @@ if (Meteor.isServer) {
                     throw new Meteor.Error(500, command + " failed");
                 }
                 console.log(stdout.toString())
-                fut.return(stdout.toString());
+                Fiber(function () {
+                    LOGSS.insert(stdout.toString());
+                    LOGSS.insert("finish");
+
+                }).run();
+
+
+               // fut.return(stdout.toString());
             });
 
             // Wait for async to finish before returning

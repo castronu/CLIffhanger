@@ -1,0 +1,13 @@
+<div class="field">
+    <div class="ui slider checkbox">
+        <input type="checkbox" name="%s" value="%s">
+        <label>
+         <strong>%s</strong>, %s
+        </label>
+    </div>
+</div>
+
+
+
+
+

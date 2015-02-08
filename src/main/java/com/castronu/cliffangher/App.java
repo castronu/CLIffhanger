@@ -13,6 +13,7 @@ import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 
 /**
  * Created by castronu on 31/01/15.
@@ -21,7 +22,7 @@ public class App {
 
     public static final Logger LOGGER = LoggerFactory.getLogger(App.class);
 
-    public static void main(String[] args) throws JAXBException, IOException {
+    public static void main(String[] args) throws JAXBException, IOException, URISyntaxException {
         JAXBContext jc = JAXBContext.newInstance("com.castronu.cliffangher.generated");
         Unmarshaller unmarshaller = jc.createUnmarshaller();
         if (args.length==0) {
@@ -34,9 +35,9 @@ public class App {
         JAXBElement<ExecutableType> root = unmarshaller.unmarshal(
                 source, ExecutableType.class);
 
-        StringBuilder data = new Formatter(root).invoke();
+        String htmlPageForMeteor = Formatter.produceHtmlPage(root);
 
-        FileUtils.writeStringToFile(new File("index.html"),data.toString());
+        FileUtils.writeStringToFile(new File("index.html"),htmlPageForMeteor);
 
         ProcessBuilder builder = new ProcessBuilder("meteor");
         builder.redirectErrorStream(true);

@@ -1,0 +1,5 @@
+<div class="field">
+    <label>%s</label>
+    <input type="text" name="%s" placeholder="%s">
+</div>
+
