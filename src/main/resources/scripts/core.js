@@ -17,9 +17,15 @@ if (Meteor.isClient) {
 
     LOGSS = new Mongo.Collection("logs");
 
+    Template.commands.rendered = function(){
+        this.$('.ui.slider.checkbox').checkbox();
+    }
+
+
     Template.commands.events({
         "submit .new-task": function (event) {
             // This function is called when the new task form is submitted
+            alert('clciked');
             var command = "";
 
             $.each($('#myform').serializeArray(), function () {
@@ -80,17 +86,6 @@ if (Meteor.isServer) {
 
         Fiber(function () {
             LOGSS.insert(document);
-        }).run();
-
-        //Cerca tutti i log...
-        Fiber(function () {
-
-            var cursor = LOGSS.find({id: count}, {content: 1, _id: 1});
-            LOGSS.find().forEach(function(doc,index,cursor){
-                console.log(doc.content);
-            });
-
-
         }).run();
         count++;
     });
