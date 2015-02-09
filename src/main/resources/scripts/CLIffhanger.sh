@@ -1,1 +1,1 @@
-java -cp cliffhanger-1.0-SNAPSHOT.jar com.castronu.cliffangher.App "$@"
+java -cp cliffhanger-*.jar com.castronu.cliffangher.App "$@"

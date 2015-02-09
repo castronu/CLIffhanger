@@ -123,7 +123,9 @@
             <div class="ui central aligned segment">
                 <h2>Events</h2>
                 {{#each commandEvents}}
-                <li class="my-pid">{{pid}} {{content}} </li>
+                {{#if isStart}}<li class="my-pid">{{pid}} {{content}} <i class="ban icon"></i></li>
+                {{else}} <li class="my-pid">{{pid}} {{content}}</li>
+                {{/if}}
                 {{/each}}
             </div>
         </div>

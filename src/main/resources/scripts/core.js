@@ -1,10 +1,7 @@
-
 if (Meteor.isClient) {
     //Configure the template logss to bu updated when the server add an entry on the collection LOGSS.
     LOGSS = new Mongo.Collection("logs");
     EVENTS = new Mongo.Collection("commandEvents");
-
-
 
 
     Meteor.subscribe('commandEvents');
@@ -32,10 +29,12 @@ if (Meteor.isClient) {
                 //The server start to tail on the log.
                 if (this.name == "hidden_log") {
                     Meteor.call("startTailOnLog", this.value);
-                } else {command += this.value + " ";}
+                } else {
+                    command += this.value + " ";
+                }
             });
 
-            console.log("Command from the form: "+command);
+            console.log("Command from the form: " + command);
 
             //The server method executeCommand is called
             Meteor.call("executeCommand", command, function (err, response) {
@@ -50,8 +49,16 @@ if (Meteor.isClient) {
 
     Template.commandEvents.events({
 
-        "click .my-pid": function (event, template) {
-           //TODO GET VALUE OF THE PID! alert($(event.target).value());
+        "click .my-pid .icon": function (event, template) {
+            //TODO GET VALUE OF THE PID!
+            // alert($(event.target.id()));
+            console.log("my-pid cliecked");
+            console.log(this.pid);
+            //The server method executeCommand is called
+            Meteor.call("killProcess", this.pid, function (err, response) {
+                console.log(response);
+                console.log(err);
+            });
         }
 
 
@@ -96,7 +103,7 @@ if (Meteor.isServer) {
     Meteor.methods({
         startTailOnLog: function (logPath) {
 
-            console.log("Log path:  "+logPath);
+            console.log("Log path:  " + logPath);
             Tail = Npm.require('tail').Tail;
             tail = new Tail(logPath);
             tail.on("line", function (data) {
@@ -120,12 +127,12 @@ if (Meteor.isServer) {
         }
     });
 
-    var processCounter=0;
+    var processCounter = 0;
 
     Meteor.methods({
         executeCommand: function (command) {
 
-            console.log("The client say: EXEC --> "+command);
+            console.log("The client say: EXEC --> " + command);
             // Set up a future
             var fut = new Future();
 
@@ -136,15 +143,15 @@ if (Meteor.isServer) {
             }, 2 * 1000);
 
 
+             var child = exec(command);
 
-            var child = exec(command);
 
-            var isFirst=true;
+            var isFirst = true;
 
-            child.stdout.on('data', function(data) {
+            child.stdout.on('data', function (data) {
                 if (isFirst == true) {
-                    logEvent("Process Started", child.pid);
-                    isFirst=false;
+                    logEvent("Process Started", child.pid, "true");
+                    isFirst = false;
                 }
 
 
@@ -159,7 +166,7 @@ if (Meteor.isServer) {
                     logEntryCounter++;
                 }).run();
             });
-            child.stderr.on('data', function(data) {
+            child.stderr.on('data', function (data) {
                 console.log('stderr: ' + data);
                 //In case of error, add the error on LOGSS collection
                 Fiber(function () {
@@ -172,13 +179,14 @@ if (Meteor.isServer) {
                     logEntryCounter++;
                 }).run();
             });
-            child.on('close', function(code) {
+            child.on('close', function (code) {
                 //The process has finish... insering log in the LOGSS collection
 
-                if(code!=0) {
-                    logEvent("Process finished with errors :(!");
+                if (code != 0) {
+                    logEvent("Process finished with errors :(!", child.pid);
                 } else {
-                logEvent("Process finished!", child.pid);}
+                    logEvent("Process finished!", child.pid);
+                }
 
 
                 console.log('closing code: ' + code);
@@ -187,12 +195,33 @@ if (Meteor.isServer) {
         }
     });
 
-    function logEvent(message,pid) {
+    Meteor.methods({
+        killProcess: function (pid) {
+
+            var child = exec("kill " + pid);
+            child.on('close', function (code) {
+                //The process has finish... insering log in the LOGSS collection
+
+                if (code != 0) {
+                    console.log("Process "+child.pid+" already killed?");
+                    //logEvent("Cannot kill process!")
+                } else {
+                    logEvent("Process killed!",child.pid);
+                }
+
+
+                console.log('closing code: ' + code);
+            });
+        }
+    });
+
+    function logEvent(message, pid, isStart) {
         var date = new Date();
         var document = {
             id: processCounter,
-            content: date+" "+message,
-            pid : pid
+            content: date + " " + message,
+            pid: pid,
+            isStart: isStart
         };
         Fiber(function () {
             EVENTS.insert(document);

@@ -6,6 +6,8 @@
 
 {{> commands}}
 
+{{> commandEvents}}
+
 {{> logss}}
 
 </body>
@@ -34,6 +36,26 @@
         </div>
     </div>
 </template>
+
+<template name="commandEvents">
+    <div class="ui two column centered grid">
+        <div class="four column centered row">
+            <div class="column"></div>
+            <div class="column"></div>
+        </div>
+        <div class="column">
+            <div class="ui central aligned segment">
+                <h2>Events</h2>
+                {{#each commandEvents}}
+                {{#if isStart}}<li class="my-pid">{{pid}} {{content}} <i class="ban icon"></i></li>
+                {{else}} <li class="my-pid">{{pid}} {{content}}</li>
+                {{/if}}
+                {{/each}}
+            </div>
+        </div>
+    </div>
+</template>
+
 <template name="logss">
     <div class="ui two column centered grid">
         <div class="four column centered row">
