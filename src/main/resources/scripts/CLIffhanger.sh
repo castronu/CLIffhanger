@@ -8,7 +8,7 @@ fi
 
 java -cp $HOME/.cliffhanger/cliffhanger-*.jar com.castronu.cliffangher.App $input
 
-trap finish EXIT
+trap EXIT
 cd $currentDir
 
 
