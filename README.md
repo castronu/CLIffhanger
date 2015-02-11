@@ -13,32 +13,39 @@ This is a configuration example for the grep program:
 ```
 <executable>
     <path>grep</path>
-    <description>This program search a given pattern in a given input file.</description>
+    <description>This program search a given pattern in a given input 
+    file.</description>
     <options>
         <option>
             <name>-n</name>
             <required>false</required>
-            <description>Each output line is preceded by its relative line number in the
-                file, starting at line 1.  The line number counter is reset for
-                each file processed.  This option is ignored if -c, -L, -l, or -q
+            <description>Each output line is preceded by its relative 
+            line number in the
+                file, starting at line 1.  The line number counter is 
+                reset for
+                each file processed.  This option is ignored if -c, -L, 
+                -l, or -q
                 is specified.</description>
         </option>
         <option>
             <name>-r</name>
             <required>false</required>
-            <description>Recursively search subdirectories listed.</description>
+            <description>Recursively search subdirectories listed.
+            </description>
         </option>
         <option>
             <name>-h</name>
             <required>false</required>
-            <description>Never print filename headers (i.e. filenames) with output 
+            <description>Never print filename headers (i.e. filenames) 
+            with output 
             lines.</description>
         </option>
         <option>
             <name>-i</name>
             <required>false</required>
             <description>--ignore-case
-                Perform case insensitive matching.  By default, grep is case sen-
+                Perform case insensitive matching.  By default, grep 
+                is case sen-
                 sitive.</description>
         </option>
     </options>
