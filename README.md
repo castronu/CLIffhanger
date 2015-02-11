@@ -31,7 +31,8 @@ This is a configuration example for the grep program:
         <option>
             <name>-h</name>
             <required>false</required>
-            <description>Never print filename headers (i.e. filenames) with output lines.</description>
+            <description>Never print filename headers (i.e. filenames) with output 
+            lines.</description>
         </option>
         <option>
             <name>-i</name>
