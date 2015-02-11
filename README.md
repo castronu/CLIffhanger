@@ -72,3 +72,5 @@ cliffhanger configGrep.xml
 Open your browser at http://localhost:3000:
 
 ![alt tag](http://www.diegocastronuovo.com/cliffhanger/cliffhangerDemo.png)
+
+CLIffhanger uses Meteor: https://www.meteor.com/
