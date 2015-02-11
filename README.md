@@ -63,4 +63,4 @@ cliffhanger configGrep.xml
 
 Open your browser at http://localhost:3000:
 
-<img src="www.diegocastronuovo.com/cliffhanger/cliffhanger.png" alt="cliffhanger" >
+![alt tag](http://www.diegocastronuovo.com/cliffhanger/cliffhanger.png)
