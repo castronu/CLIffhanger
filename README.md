@@ -1,6 +1,6 @@
 CLIffhanger create a web interface for a batch program, for free.
 
-Installation (linux/ MacOSX):
+Installation (linux / MacOSX):
 
 ```
 curl www.diegocastronuovo.com/cliffhanger/installCliffhanger.sh | sh
