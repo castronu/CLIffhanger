@@ -1,9 +1,10 @@
 CLIffhanger create a web interface for a batch program, for free.
 
-Installation:
+Installation (linux/ MacOSX):
 
-
-
+```
+curl www.diegocastronuovo.com/cliffhanger/installCliffhanger.sh | sh
+```
 
 How does it works? Simply provide an xml configuration for your command-line-based program and start CLIffhanger, go to http://localhost:3000 and enjoy your free web interface. 
 
@@ -60,4 +61,6 @@ Install CLIffhanger, save this content in a file, e.g. configGrep.xml, then run:
 cliffhanger configGrep.xml
 ```
 
-Open your browser at http://localhost:3000.
+Open your browser at http://localhost:3000:
+
+<img src="www.diegocastronuovo.com/cliffhanger/cliffhanger.png" alt="cliffhanger" >
