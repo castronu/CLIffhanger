@@ -1,1 +1,1 @@
-java -cp cliffhanger-*.jar com.castronu.cliffangher.App "$@"
+java -cp $HOME/.cliffhanger/cliffhanger-*.jar com.castronu.cliffangher.App "$@"
