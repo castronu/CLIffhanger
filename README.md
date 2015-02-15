@@ -1,6 +1,6 @@
 CLIffhanger create a web interface for a batch program, for free.
 
-Installation (linux/ MacOSX):
+Installation (linux / MacOSX):
 
 ```
 curl www.diegocastronuovo.com/cliffhanger/installCliffhanger.sh | sh
@@ -72,3 +72,5 @@ cliffhanger configGrep.xml
 Open your browser at http://localhost:3000:
 
 ![alt tag](http://www.diegocastronuovo.com/cliffhanger/cliffhangerDemo.png)
+
+CLIffhanger uses Meteor: https://www.meteor.com/
