@@ -1,0 +1,3 @@
+Template.%s.rendered = function () {
+    this.$('.ui.toggle.checkbox').checkbox();
+}

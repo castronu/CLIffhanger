@@ -1,0 +1,6 @@
+<div class="field">
+<div class="ui radio checkbox">
+    <input type="radio" name="mode" value="%s">
+    <label>%s</label>
+    </div>
+</div>

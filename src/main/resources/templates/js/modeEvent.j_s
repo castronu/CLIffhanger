@@ -1,0 +1,9 @@
+Template.commands.events({
+    'click .ui.radio.checkbox' : function(event, template){
+        var mode = $(event.target).text();
+        console.log(mode);
+        %s
+        Session.set(mode+"Selected", true);
+
+    }
+})

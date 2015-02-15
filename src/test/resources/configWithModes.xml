@@ -1,0 +1,56 @@
+<executable>
+    <path>batchWithModes</path>
+    <description>This program has different modes with different argument / options set</description>
+    <options>
+        <option>
+            <name>-v</name>
+            <required>false</required>
+            <description>Verbose, Print full log</description>
+        </option>
+    </options>
+    <modes>
+        <mode>
+            <name>Import</name>
+            <value>-i</value>
+            <options>
+                <option>
+                    <name>-v</name>
+                    <required>false</required>
+                    <description>Verbose, Print full log</description>
+                </option>
+            </options>
+            <arguments>
+                <argument>
+                    <name>pattern</name>
+                </argument>
+                <argument>
+                    <name>inputFile</name>
+                </argument>
+            </arguments>
+        </mode>
+        <mode>
+            <name>Export</name>
+            <value>-e</value>
+            <options>
+                <option>
+                    <name>-v</name>
+                    <required>false</required>
+                    <description>Verbose, Print full log</description>
+                </option>
+                <option>
+                    <name>-r</name>
+                    <required>false</required>
+                    <description>Recursively search subdirectories listed.</description>
+                </option>
+            </options>
+            <arguments>
+                <argument>
+                    <name>outputFile</name>
+                </argument>
+            </arguments>
+        </mode>
+    </modes>
+    <logs>
+        <log>/tmp/output.log</log>
+    </logs>
+</executable>

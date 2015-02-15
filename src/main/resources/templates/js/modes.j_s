@@ -1,0 +1,26 @@
+Template.Import.rendered = function () {
+    this.$('.ui.toggle.checkbox').checkbox();
+}
+
+Template.Export.rendered = function () {
+    this.$('.ui.toggle.checkbox').checkbox();
+}
+
+Template.commands.events({
+    'click .ui.radio.checkbox' : function(event, template){
+        var mode = $(event.target).text();
+        console.log(mode);
+        Session.set("ImportSelected", false);
+        Session.set("ExportSelected", false);
+        Session.set(mode+"Selected", true);
+
+    }
+})
+
+Template.modes.isImportSelected = function(){
+    return Session.get("ImportSelected");
+}
+
+Template.modes.isExportSelected = function(){
+    return Session.get("ExportSelected");
+}

@@ -37,7 +37,11 @@ public class App {
 
         String htmlPageForMeteor = Formatter.produceHtmlPage(root);
 
+        String jsPageForMeteor = Formatter.produceJavascript(root);
+
         FileUtils.writeStringToFile(new File("index.html"),htmlPageForMeteor);
+
+        FileUtils.writeStringToFile(new File("core.js"),jsPageForMeteor);
 
         ProcessBuilder builder = new ProcessBuilder("meteor");
         builder.redirectErrorStream(true);

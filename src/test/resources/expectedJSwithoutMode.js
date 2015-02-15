@@ -13,10 +13,16 @@ if (Meteor.isClient) {
     Template.logss.logs = function () {
         return LOGSS.find();
     }
+
+
+
     //Bootstrap JS for Semantic UI: https://github.com/nooitaf/meteor-semantic-ui
     Template.commands.rendered = function () {
-        this.$('.ui.slider.checkbox').checkbox();
+        this.$('.ui.toggle.checkbox').checkbox();
+        this.$('.ui.radio.checkbox').checkbox();
     }
+
+    /*!MODES!*/
 
     //Listener for the submit of the form
     Template.commands.events({
@@ -143,7 +149,7 @@ if (Meteor.isServer) {
             }, 2 * 1000);
 
 
-             var child = exec(command);
+            var child = exec(command);
 
 
             var isFirst = true;

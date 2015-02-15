@@ -1,5 +1,5 @@
 <div class="field">
-    <div class="ui slider checkbox">
+    <div class="ui toggle checkbox">
         <input type="checkbox" name="%s" value="%s">
         <label>
          <strong>%s</strong>, %s

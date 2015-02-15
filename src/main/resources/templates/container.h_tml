@@ -37,6 +37,8 @@
     </div>
 </template>
 
+<!--[MODES]-->
+
 <template name="commandEvents">
     <div class="ui two column centered grid">
         <div class="four column centered row">

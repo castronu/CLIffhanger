@@ -18,7 +18,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class FormatterTest {
 
     @Test
-    public void testHtml() throws Exception {
+    public void testHtmlProductionWithoutModes() throws Exception {
 
         JAXBContext jc = JAXBContext.newInstance("com.castronu.cliffangher.generated");
         Unmarshaller unmarshaller = jc.createUnmarshaller();
@@ -27,10 +27,44 @@ public class FormatterTest {
         JAXBElement<ExecutableType> root = unmarshaller.unmarshal(
                 source, ExecutableType.class);
 
-        String data = Formatter.produceHtmlPage(root);
+        String actual = Formatter.produceHtmlPage(root);
 
         String expected = FileUtils.readFileToString(new File(Thread.currentThread().getContextClassLoader().getResource("expectedIndex.html").getFile()));
 
-        assertThat(expected.replaceAll("\\s+",""),is(data.replaceAll("\\s+","")));
+        assertThat(expected.replaceAll("\\s+",""),is(actual.replaceAll("\\s+","")));
+    }
+
+    @Test
+    public void testHtmlProductionWithModes() throws Exception {
+
+        JAXBContext jc = JAXBContext.newInstance("com.castronu.cliffangher.generated");
+        Unmarshaller unmarshaller = jc.createUnmarshaller();
+        Source source = new StreamSource(Thread.currentThread().getContextClassLoader().getResourceAsStream("configWithModes.xml"));
+
+        JAXBElement<ExecutableType> root = unmarshaller.unmarshal(
+                source, ExecutableType.class);
+
+        String actual = Formatter.produceJavascript(root);
+
+        String expected = FileUtils.readFileToString(new File(Thread.currentThread().getContextClassLoader().getResource("expectedJSforModes.js").getFile()));
+
+        assertThat(expected.replaceAll("\\s+",""),is(actual.replaceAll("\\s+","")));
+    }
+
+    @Test
+    public void testJSProductionWithoutModes() throws Exception {
+
+        JAXBContext jc = JAXBContext.newInstance("com.castronu.cliffangher.generated");
+        Unmarshaller unmarshaller = jc.createUnmarshaller();
+        Source source = new StreamSource(Thread.currentThread().getContextClassLoader().getResourceAsStream("configGrep.xml"));
+
+        JAXBElement<ExecutableType> root = unmarshaller.unmarshal(
+                source, ExecutableType.class);
+
+        String actual = Formatter.produceJavascript(root);
+
+        String expected = FileUtils.readFileToString(new File(Thread.currentThread().getContextClassLoader().getResource("expectedJSwithoutMode.js").getFile()));
+
+        assertThat(expected.replaceAll("\\s+",""),is(actual.replaceAll("\\s+","")));
     }
 }
