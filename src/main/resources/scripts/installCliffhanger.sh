@@ -86,7 +86,7 @@ test -x "$HOME/.cliffhanger"
 echo
 echo "CLIffhanger ${RELEASE} has been installed in your home directory (~/.cliffhanger)."
 
-LAUNCHER="$HOME/.cliffhanger/CLIffhanger.sh"
+LAUNCHER="$HOME/.cliffhanger/CLIffhanger-release.sh"
 
 
 if ln -s "$LAUNCHER" "$PREFIX/bin/cliffhanger"  >/dev/null 2>&1; then

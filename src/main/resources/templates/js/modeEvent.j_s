@@ -6,4 +6,4 @@ Template.commands.events({
         Session.set(mode+"Selected", true);
 
     }
-})
+});

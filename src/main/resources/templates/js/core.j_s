@@ -7,12 +7,12 @@ if (Meteor.isClient) {
     Meteor.subscribe('commandEvents');
     Template.commandEvents.commandEvents = function () {
         return EVENTS.find();
-    }
+    };
 
     Meteor.subscribe('logss');
     Template.logss.logs = function () {
         return LOGSS.find();
-    }
+    };
 
 
     //Bootstrap JS for Semantic UI: https://github.com/nooitaf/meteor-semantic-ui
@@ -20,7 +20,7 @@ if (Meteor.isClient) {
         this.$('.ui.toggle.checkbox').checkbox();
         this.$('.ui.radio.checkbox').checkbox();
 
-    }
+    };
 
     /*!MODES!*/
 

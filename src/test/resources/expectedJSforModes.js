@@ -7,49 +7,46 @@ if (Meteor.isClient) {
     Meteor.subscribe('commandEvents');
     Template.commandEvents.commandEvents = function () {
         return EVENTS.find();
-    }
+    };
 
     Meteor.subscribe('logss');
     Template.logss.logs = function () {
         return LOGSS.find();
-    }
-
+    };
 
 
     //Bootstrap JS for Semantic UI: https://github.com/nooitaf/meteor-semantic-ui
     Template.commands.rendered = function () {
         this.$('.ui.toggle.checkbox').checkbox();
         this.$('.ui.radio.checkbox').checkbox();
-    }
+
+    };
 
     Template.Import.rendered = function () {
         this.$('.ui.toggle.checkbox').checkbox();
-    }
-
+    };
     Template.Export.rendered = function () {
         this.$('.ui.toggle.checkbox').checkbox();
-    }
-
+    };
     Template.commands.events({
         'click .ui.radio.checkbox' : function(event, template){
             var mode = $(event.target).text();
             console.log(mode);
-            Session.set("ImportSelected", false);
-            Session.set("ExportSelected", false);
+            Session.set("ImportSelected", false);Session.set("ExportSelected", false);
             Session.set(mode+"Selected", true);
 
         }
-    })
-
+    });
     Template.modes.isImportSelected = function(){
         return Session.get("ImportSelected");
-    }
-
+    };
     Template.modes.isExportSelected = function(){
         return Session.get("ExportSelected");
-    }
+    };
 
-    //Listener for the submit of the form
+
+
+//Listener for the submit of the form
     Template.commands.events({
         "submit .new-task": function (event) {
             // This function is called when the new task form is submitted
@@ -234,10 +231,10 @@ if (Meteor.isServer) {
                 //The process has finish... insering log in the LOGSS collection
 
                 if (code != 0) {
-                    console.log("Process "+child.pid+" already killed?");
+                    console.log("Process " + child.pid + " already killed?");
                     //logEvent("Cannot kill process!")
                 } else {
-                    logEvent("Process killed!",child.pid);
+                    logEvent("Process killed!", child.pid);
                 }
 
 

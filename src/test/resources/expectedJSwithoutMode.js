@@ -7,12 +7,12 @@ if (Meteor.isClient) {
     Meteor.subscribe('commandEvents');
     Template.commandEvents.commandEvents = function () {
         return EVENTS.find();
-    }
+    };
 
     Meteor.subscribe('logss');
     Template.logss.logs = function () {
         return LOGSS.find();
-    }
+    };
 
 
 
@@ -20,7 +20,7 @@ if (Meteor.isClient) {
     Template.commands.rendered = function () {
         this.$('.ui.toggle.checkbox').checkbox();
         this.$('.ui.radio.checkbox').checkbox();
-    }
+    };
 
     /*!MODES!*/
 
