@@ -3,6 +3,7 @@
     <!-- Specifies that our binary distribution is a zip package -->
     <formats>
         <format>tar.gz</format>
+        <format>zip</format>
     </formats>
 
     <!-- Adds the dependencies of our application to the lib directory -->
